@@ -1,5 +1,5 @@
 # Kafka Helm Sandbox
-A kafka helm commands collection for local sanbox envs
+WIP DONT USE IT A kafka helm commands collection for local sanbox envs
 
 ## Get Started
 
