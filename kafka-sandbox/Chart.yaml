@@ -1,0 +1,15 @@
+apiVersion: v2
+name: kafka-sandbox
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "7.2.1"
+dependencies:
+  - name: zookeeper
+    version: 0.1.0
+    repository: file://./charts/zookeeper
+    condition: zookeeper.enabled
+  - name: kafka
+    version: 0.1.0
+    repository: file://./charts/kafka
+    condition: kafka.enabled
