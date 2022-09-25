@@ -1,1 +1,4 @@
 .idea/
+*.lock
+*.tgz
+kaskade.yml

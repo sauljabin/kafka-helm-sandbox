@@ -1,0 +1,23 @@
+{{- if .Values.nodeport.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "schema-registry.fullname" . }}-nodeport
+  labels:
+    app: {{ template "schema-registry.name" . }}
+    chart: {{ template "schema-registry.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    pod: {{ template "schema-registry.name" . }}
+spec:
+  type: NodePort
+  ports:
+    - name: external-schema-registry
+      port: {{ .Values.nodeport.servicePort }}
+      targetPort: {{ .Values.servicePort }}
+      nodePort: {{ .Values.nodeport.externalListenerPort }}
+      protocol: TCP
+  selector:
+    app: {{ include "schema-registry.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}

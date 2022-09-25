@@ -62,7 +62,7 @@ external advertised listeners if configurationOverrides.advertised.listeners is 
 {{- if (index .Values "configurationOverrides" "advertised.listeners") -}}
 {{- printf ",%s" (first (pluck "advertised.listeners" .Values.configurationOverrides)) }}
 {{- else -}}
-{{- printf ",EXTERNAL://${HOST_IP}:$((%s + ${KAFKA_BROKER_ID}))" (.Values.nodeport.firstListenerPort | toString) }}
+{{- printf ",EXTERNAL://localhost:$((%s + ${KAFKA_BROKER_ID}))" (.Values.nodeport.firstListenerPort | toString) }}
 {{- end -}}
 {{- end -}}
 

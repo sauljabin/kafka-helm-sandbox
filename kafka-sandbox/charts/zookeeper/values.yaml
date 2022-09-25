@@ -13,7 +13,7 @@ servers: 3
 ## minAvailable: 2
 
 ## Images Info
-## ref: https://hub.docker.com/r/confluentinc/zookeeper/
+## ref: https://hub.docker.com/r/confluentinc/cp-zookeeper/
 image: confluentinc/cp-zookeeper
 imageTag: 7.2.1
 

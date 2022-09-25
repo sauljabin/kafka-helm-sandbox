@@ -21,6 +21,8 @@ spec:
     type: {{ .Values.updateStrategy }}
   template:
     metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
       labels:
         app: {{ template "kafka.name" . }}
         release: {{ .Release.Name }}

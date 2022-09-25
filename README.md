@@ -7,22 +7,33 @@ A kafka helm commands collection for local sandbox envs. This chart is base on h
 Install charts:
 
 ```shell
-helm upgrade --install kafka-sandbox kafka-sandbox/
+helm install sandbox-cluster kafka-sandbox/
+```
+
+Upgrade charts:
+
+```shell
+helm upgrade --install sandbox-cluster kafka-sandbox/
 ```
 
 Uninstall
 
 ```shell
-helm uninstall kafka-sandbox
-kubectl delete pvc --selector=release=kafka-sandbox
+helm uninstall sandbox-cluster
+kubectl delete pvc --selector=release=sandbox-cluster
 ```
+
+## Ports
+
+- kafka `localhost:30090,localhost:30091,localhost:30092`
+- schema registry http://localhost:30081
 
 ## Kafka commands
 
 Create a topic:
 
 ```shell
-kafka-topics --create --bootstrap-server localhost:31090 \
+kafka-topics --create --bootstrap-server localhost:30090 \
     --replication-factor 3 \
     --partitions 3 \
     --topic test
@@ -31,29 +42,26 @@ kafka-topics --create --bootstrap-server localhost:31090 \
 Delete a topic:
 
 ```shell
-kafka-topics --delete --bootstrap-server localhost:31090 \
+kafka-topics --delete --bootstrap-server localhost:30090 \
     --topic test
 ```
 
 List topics:
 
 ```shell
-kafka-topics --bootstrap-server localhost:31090 --list
+kafka-topics --bootstrap-server localhost:30090 --list
 ```
 
 List Groups:
 
 ```shell
-kafka-consumer-groups --bootstrap-server localhost:31090 --list
+kafka-consumer-groups --bootstrap-server localhost:30090 --list
 ```
 
 Delete group:
 
 ```shell
-<<<<<<< HEAD
-kafka-consumer-groups --bootstrap-server ${BOOTSTRAP_SERVERS} --delete --group test
-=======
-kafka-consumer-groups --bootstrap-server localhost:31090 --delete --group test
+kafka-consumer-groups --bootstrap-server localhost:30090 --delete --group test
 ```
 
 ## Workstation setup
@@ -62,5 +70,4 @@ Install pre-commit:
 
 ```shell
 pre-commit install
->>>>>>> 938d500 (Add kafka and zookeeper charts)
 ```

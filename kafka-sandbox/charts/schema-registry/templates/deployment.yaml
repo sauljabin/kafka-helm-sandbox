@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "schema-registry.fullname" . }}
+  labels:
+    app: {{ template "schema-registry.name" . }}
+    chart: {{ template "schema-registry.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "schema-registry.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      labels:
+        app: {{ template "schema-registry.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      securityContext:
+      {{- if .Values.securityContext }}
+{{ toYaml .Values.securityContext | indent 8 }}
+      {{- end}}
+      containers:
+        - name: {{ template "schema-registry.name" . }}-server
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          ports:
+            - name: schema-registry
+              containerPort: {{ .Values.servicePort }}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          env:
+          - name: SCHEMA_REGISTRY_HOST_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: SCHEMA_REGISTRY_LISTENERS
+            value: http://0.0.0.0:{{ .Values.servicePort }}
+          - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+            value: {{ template "schema-registry.kafka.bootstrapServers" . }}
+          - name: SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID
+            value: {{ template "schema-registry.groupId" . }}
+          - name: SCHEMA_REGISTRY_MASTER_ELIGIBILITY
+            value: "true"
+          - name: SCHEMA_REGISTRY_HEAP_OPTS
+            value: "{{ .Values.heapOptions }}"
+          {{ range $configName, $configValue := .Values.configurationOverrides }}
+          - name: SCHEMA_REGISTRY_{{ $configName | replace "." "_" | upper }}
+            value: {{ $configValue | quote }}
+          {{ end }}
+          {{- range $key, $value := .Values.customEnv }}
+          - name: {{ $key | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- if .Values.schemaRegistryOpts }}
+          - name: SCHEMA_REGISTRY_OPTS
+            value: "{{ .Values.schemaRegistryOpts }}"
+          {{- end }}
+          {{- if .Values.jmx.port }}
+          - name: JMX_PORT
+            value: "{{ .Values.jmx.port }}"
+          {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}

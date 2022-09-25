@@ -6,5 +6,5 @@ version: 0.1.0
 dependencies:
   - name: zookeeper
     version: 0.1.0
-    repository: file://../zookeeper
     condition: zookeeper.enabled
+    repository: file://../zookeeper
