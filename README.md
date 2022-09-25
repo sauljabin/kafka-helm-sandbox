@@ -1,6 +1,8 @@
 # Kafka Helm Sandbox
 
-A kafka helm commands collection for local sandbox envs. This chart is base on https://github.com/confluentinc/cp-helm-charts.
+A kafka helm chart for local sandbox environments. 
+
+This chart is based on https://github.com/confluentinc/cp-helm-charts.
 
 ## Get Started
 
