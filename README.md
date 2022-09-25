@@ -18,7 +18,7 @@ Upgrade charts:
 helm upgrade --install sandbox-cluster kafka-sandbox/
 ```
 
-Uninstall
+Uninstall:
 
 ```shell
 helm uninstall sandbox-cluster
